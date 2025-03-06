@@ -53,3 +53,4 @@ while True:
         if not mouse_pos:
             mouse_pos = search_template('close_icon1.png')
         imitate_click(mouse_pos)
+    sleep_random()
