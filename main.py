@@ -14,8 +14,9 @@ def sleep_random(base=1000):
     time.sleep(random.randint(base + 500, base + 1000) / 1000)
 
 
-def imitate_click(l, t):
-    pyautogui.leftClick(l, t)
+def imitate_click(mouse_pos):
+    pyautogui.leftClick(mouse_pos.left + random.randint(0, mouse_pos.width),
+                        mouse_pos.top + random.randint(0, mouse_pos.height))
     sleep_random()
 
 
@@ -37,16 +38,18 @@ while True:
         sys.exit()
     if check_enough_hero_count() and check_is_there_quest_slot():
         mouse_pos = search_template('quest.png')
-        imitate_click(mouse_pos.left, mouse_pos.top)
+        imitate_click(mouse_pos)
         mouse_pos = search_template('grindable_quest.png', confidence=0.8)
-        imitate_click(mouse_pos.left, mouse_pos.top)
+        imitate_click(mouse_pos)
         mouse_pos = search_template('explore_area.png')
-        imitate_click(mouse_pos.left, mouse_pos.top)
+        imitate_click(mouse_pos)
         mouse_pos = search_template('close_icon.png')
-        imitate_click(mouse_pos.left, mouse_pos.top)
+        imitate_click(mouse_pos)
     mouse_pos = search_template('grindable_quest_completed.png')
     if mouse_pos:
-        imitate_click(mouse_pos.left, mouse_pos.top)
-        sleep_random(base=5000)
+        imitate_click(mouse_pos)
+        sleep_random(base=7000)
         mouse_pos = search_template('collect_all.png')
-        imitate_click(mouse_pos.left, mouse_pos.top)
+        if not mouse_pos:
+            mouse_pos = search_template('close_icon1.png')
+        imitate_click(mouse_pos)
