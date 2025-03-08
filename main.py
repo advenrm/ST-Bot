@@ -1,3 +1,4 @@
+import datetime
 import keyboard
 import pyautogui
 import random
@@ -30,27 +31,35 @@ def check_enough_hero_count():
 
 def check_is_there_quest_slot():
     mouse_pos = search_template('quests_full.png')
-    return False if mouse_pos is not None else True
+    return mouse_pos is None
 
 
+i = 0
 while True:
+    print(i, datetime.datetime.now())
     if keyboard.is_pressed('q'):
         sys.exit()
     if check_enough_hero_count() and check_is_there_quest_slot():
-        mouse_pos = search_template('quest.png')
-        imitate_click(mouse_pos)
+        mouse_pos = search_template('quest.png', confidence=0.8)
+        try:
+            imitate_click(mouse_pos)
+        except AttributeError as err:
+            print(err)
+            continue
         mouse_pos = search_template('grindable_quest.png', confidence=0.8)
         imitate_click(mouse_pos)
-        mouse_pos = search_template('explore_area.png')
+        mouse_pos = search_template('explore_area.png', confidence=0.9)
         imitate_click(mouse_pos)
         mouse_pos = search_template('close_icon.png')
-        imitate_click(mouse_pos)
-    mouse_pos = search_template('grindable_quest_completed.png')
+        if mouse_pos:
+            imitate_click(mouse_pos)
+    mouse_pos = search_template('quest_completed.png', confidence=0.8)
     if mouse_pos:
         imitate_click(mouse_pos)
-        sleep_random(base=7000)
-        mouse_pos = search_template('collect_all.png')
+        sleep_random(base=12000)
+        mouse_pos = search_template('collect_all.png', confidence=0.9)
         if not mouse_pos:
             mouse_pos = search_template('close_icon1.png')
         imitate_click(mouse_pos)
     sleep_random()
+    i += 1
